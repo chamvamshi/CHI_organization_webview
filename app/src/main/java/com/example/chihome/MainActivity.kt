@@ -9,6 +9,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,7 +34,15 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun webviewSetUp(webView: WebView) {
-        webView.webViewClient = WebViewClient()
+        webView.webViewClient = object: WebViewClient(){
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                if (url != null) {
+                    view?.loadUrl(url)
+                return true
+                }
+              return true
+            }
+        }
 
 
         webView.apply {
@@ -51,15 +60,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-        if (url.contains("stackoverflow.com")) {
-            view.loadUrl(url)
-        } else {
-            val i = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            startActivity(i)
-        }
-        return true
-    }
+
 
 
     override fun onBackPressed() {
@@ -69,4 +70,7 @@ class MainActivity : AppCompatActivity() {
            finish()
         }
     }
+
+
+
 }
